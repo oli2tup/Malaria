@@ -8,7 +8,7 @@ import time
 from keras.models import Sequential
 from keras.layers import Conv2D, Activation, Dense, MaxPooling2D, Flatten, Dropout
 from sklearn.metrics import log_loss
-from keras.optimizers import SGD
+from tensorflow.keras.optimizers import SGD
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import classification_report,confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
@@ -41,7 +41,7 @@ model.add(Dense(num_classes, activation='softmax'))
 model.summary()
 
 #fix the optimizer
-sgd = SGD(lr=0.000001, decay=1e-6, momentum=0.9, nesterov=True) #try varying this for your task and see the best fit
+sgd = SGD(learning_rate=0.000001, decay=1e-6, momentum=0.9, nesterov=True) #try varying this for your task and see the best fit
 
 #compile the model
 model.compile(optimizer=sgd,

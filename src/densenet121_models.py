@@ -1,6 +1,6 @@
 #This is the root model for DenseNet-121
 
-from keras.optimizers import SGD
+from tensorflow.keras.optimizers import SGD
 from keras.layers import Input, merge, ZeroPadding2D
 from keras.layers.core import Dense, Dropout, Activation
 from keras.layers.convolutional import Convolution2D

@@ -1,30 +1,32 @@
 ########################load libraries#########################################
 import time
+
+import matplotlib.pyplot as plt
+import numpy as np
+from keras import applications
 from keras.layers import Dense, Dropout, GlobalAveragePooling2D
 from keras.models import Model
-from keras import applications
-from keras.optimizers import SGD
-from load_data import load_resized_training_data, load_resized_validation_data
-from sklearn.metrics import log_loss
-import numpy as np
-from densenet121_models import densenet121_model 
-from sklearn.metrics import roc_curve, auc, accuracy_score
-from sklearn.metrics import classification_report,confusion_matrix
-import matplotlib.pyplot as plt
-from evaluation import plot_confusion_matrix
 from sklearn.metrics import average_precision_score
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import log_loss
+from sklearn.metrics import roc_curve, auc, accuracy_score
+from tensorflow.keras.optimizers import SGD
+
+from evaluation import plot_confusion_matrix
+from load_data import load_resized_training_data, load_resized_validation_data
+
 #########################image characteristics#################################
 img_rows=100 #dimensions of image
 img_cols=100
 channel = 3 #RGB
-num_classes = 2 
+num_classes = 2
 batch_size = 1 #vary depending on the GPU
 num_epoch = 60
 ###############################################################################
 ''' This code uses VGG-16 as a feature extractor'''
 
 # create the base pre-trained model
-base_model = applications.VGG16(weights='imagenet', include_top=False, input_shape=(100,100,3))
+base_model = applications.VGG16(include_top=False, weights='imagenet', input_shape=(100,100,3))
 
 ''' you can use the rest of the models like:
 feature_model = applications.ResNet50((weights='imagenet', include_top=False, input_shape=(224,224,3)) 
@@ -34,7 +36,7 @@ The model can be used as :
 feature_model = densenet121_model(img_rows=img_rows, img_cols=img_cols, color_type=channel, num_classes=num_classes)
 '''
 #extract feature from an intermediate layer
-base_model = Model(input=base_model.input, output=base_model.get_layer('block5_conv2').output) 
+base_model = Model(input=base_model.input, output=base_model.get_layer('block5_conv2').output)
 
 ''' you can use the rest of the models like this:
 feature_model = Model(input=feature_model.input, output=feature_model.get_layer('res5c_branch2c').output) #for ResNet50
@@ -60,7 +62,7 @@ for layer in base_model.layers:
     layer.trainable = False
 # compile the model (should be done *after* setting layers to non-trainable)
 #fix the optimizer
-sgd = SGD(lr=0.00001, decay=1e-6, momentum=0.9, nesterov=True) 
+sgd = SGD(lr=0.00001, decay=1e-6, momentum=0.9, nesterov=True)
 #compile the gpu model
 model.compile(optimizer=sgd,
               loss='mse',
@@ -103,14 +105,14 @@ roc_auc = dict()
 for i in range(num_classes):
     fpr[i], tpr[i], _ = roc_curve(Y_valid[:, i], y_pred[:, i])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    
+
 # Compute micro-average ROC curve and ROC area
 fpr["micro"], tpr["micro"], _ = roc_curve(Y_valid.ravel(), y_pred.ravel())
 roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
 #Plot ROC curves
 plt.figure(figsize=(15,10), dpi=300)
-lw = 1 
+lw = 1
 plt.plot(fpr[1], tpr[1], color='red',
          lw=lw, label='ROC curve (area = %0.4f)' % roc_auc[1])
 plt.plot([0, 1], [0, 1], color='black', lw=lw, linestyle='--')
@@ -127,7 +129,7 @@ score = log_loss(Y_valid,y_pred)
 print(score)
 
 # compute the average precision score
-prec_score = average_precision_score(Y_valid,y_pred)  
+prec_score = average_precision_score(Y_valid,y_pred)
 print(prec_score)
 
 # compute the accuracy on validation data

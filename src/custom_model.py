@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 from evaluation import plot_confusion_matrix
 from sklearn.metrics import average_precision_score
 from load_data import load_resized_training_data, load_resized_validation_data
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 #########################image characteristics#################################
 img_rows=100 #dimensions of image
 img_cols=100
@@ -44,7 +46,7 @@ model.summary()
 sgd = SGD(learning_rate=0.000001, decay=1e-6, momentum=0.9, nesterov=True) #try varying this for your task and see the best fit
 
 #compile the model
-model.compile(optimizer=sgd,
+model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 ###############################################################################

@@ -3,14 +3,17 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
+import tensorflow
+from tensorflow import keras
 from keras import applications
-from keras.layers import Dense, Dropout, GlobalAveragePooling2D
-from keras.models import Model
+from tensorflow.keras.layers import Dense, Dropout, GlobalAveragePooling2D
+from tensorflow.keras.models import Model
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.metrics import log_loss
 from sklearn.metrics import roc_curve, auc, accuracy_score
 from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.applications.vgg16 import VGG16
 
 from evaluation import plot_confusion_matrix
 from load_data import load_resized_training_data, load_resized_validation_data
@@ -26,7 +29,7 @@ num_epoch = 60
 ''' This code uses VGG-16 as a feature extractor'''
 
 # create the base pre-trained model
-base_model = applications.VGG16(include_top=False, weights='imagenet', input_shape=(100,100,3))
+base_model = VGG16(include_top=False, weights='imagenet', input_shape=(100,100,3))
 
 ''' you can use the rest of the models like:
 feature_model = applications.ResNet50((weights='imagenet', include_top=False, input_shape=(224,224,3)) 
@@ -35,8 +38,8 @@ For DenseNet, the main file densenet121_model is included to this repository.
 The model can be used as :
 feature_model = densenet121_model(img_rows=img_rows, img_cols=img_cols, color_type=channel, num_classes=num_classes)
 '''
-#extract feature from an intermediate layer
-base_model = Model(input=base_model.input, output=base_model.get_layer('block5_conv2').output)
+# extract feature from an intermediate layer
+base_model = Model(inputs=base_model.input, outputs=base_model.get_layer('block5_conv2').output)
 
 ''' you can use the rest of the models like this:
 feature_model = Model(input=feature_model.input, output=feature_model.get_layer('res5c_branch2c').output) #for ResNet50
@@ -49,10 +52,10 @@ base_model.summary()
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
-x = Dense(1024, activation='relu')(x)
-x = Dropout(0.5)(x)
+x = tensorflow.keras.layers.Dense(1024, activation='relu')(x)
+x = tensorflow.keras.layers.Dropout(0.5)(x)
 # and a logistic layer 
-predictions = Dense(num_classes, activation='softmax', name='predictions')(x)
+predictions = tensorflow.keras.layers.Dense(num_classes, activation='softmax', name='predictions')(x)
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=predictions)
 ###############################################################################
@@ -62,7 +65,7 @@ for layer in base_model.layers:
     layer.trainable = False
 # compile the model (should be done *after* setting layers to non-trainable)
 #fix the optimizer
-sgd = SGD(lr=0.00001, decay=1e-6, momentum=0.9, nesterov=True)
+sgd = SGD(learning_rate=0.00001, decay=1e-6, momentum=0.9, nesterov=True)
 #compile the gpu model
 model.compile(optimizer=sgd,
               loss='mse',

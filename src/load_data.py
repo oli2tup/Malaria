@@ -4,19 +4,22 @@ import numpy as np
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 from keras.utils import np_utils
+import tensorflow as tf
 ###############################################################################
 # cross-validation at the patient level
 # train_data_dir = 'f1_mal/train'
 # valid_data_dir = 'f1_mal/valid'
-train_data_dir = 'M:/Year 3/CNN/Data/nih-malaria'
+print(tf.__version__)
+
+train_data_dir = 'M:/Year 3/CNN/Data/nih-malaria' # path on laptop is- 'C:/Users/Olumide/Documents/MEGAsync/Yr3/CNN/Data/nih-malaria'
 valid_data_dir = 'M:/Year 3/CNN/Data/nih-malaria'
 ###############################################################################
 # declare the number of samples in each category
 nb_train_samples = 22048  # training samples
 nb_valid_samples = 5510  # validation samples
 num_classes = 2
-img_rows_orig = 148
-img_cols_orig = 142
+img_rows_orig = 208
+img_cols_orig = 148
 
 
 def load_training_data():
@@ -112,5 +115,3 @@ def load_resized_validation_data(img_rows, img_cols):
     return X_valid, Y_valid
 
 
-load_resized_training_data(148, 142)
-load_resized_validation_data(148, 142)

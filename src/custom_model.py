@@ -7,21 +7,27 @@ import numpy as np
 import time
 from keras.models import Sequential
 from keras.layers import Conv2D, Activation, Dense, MaxPooling2D, Flatten, Dropout
+from keras_preprocessing.image import ImageDataGenerator
 from sklearn.metrics import log_loss
-from keras.optimizers import SGD
+from tensorflow.keras.optimizers import SGD
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import classification_report,confusion_matrix, accuracy_score
 import matplotlib.pyplot as plt
 from evaluation import plot_confusion_matrix
 from sklearn.metrics import average_precision_score
-from load_data import load_resized_training_data, load_resized_validation_data
+
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 #########################image characteristics#################################
-img_rows=100 #dimensions of image
-img_cols=100
+#img_rows=100 #dimensions of image
+#img_cols=100
+
+img_width = 100
+img_height = 100
 channel = 3 #RGB
 num_classes = 2 
 batch_size = 1
-num_epoch = 60
+num_epoch = 20
 ############################################################################################################################
 """configuring the customized model"""
 model = Sequential()
@@ -41,22 +47,48 @@ model.add(Dense(num_classes, activation='softmax'))
 model.summary()
 
 #fix the optimizer
-sgd = SGD(lr=0.000001, decay=1e-6, momentum=0.9, nesterov=True) #try varying this for your task and see the best fit
+sgd = SGD(learning_rate=0.000001, decay=1e-6, momentum=0.9, nesterov=True) #try varying this for your task and see the best fit
 
 #compile the model
-model.compile(optimizer=sgd,
-              loss='categorical_crossentropy',
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 ###############################################################################
 #load data
-X_train, Y_train = load_resized_training_data(img_rows, img_cols)
+#X_train, Y_train = load_resized_training_data(img_rows, img_cols)
 #print the shape of the data
-print(X_train.shape, Y_train.shape)
+#print(X_train.shape, Y_train.shape)
+
+datagen = ImageDataGenerator(rescale=1/255.0, validation_split=0.2) # using 20% of data as validation
+
+train_data_generator = datagen.flow_from_directory(
+    directory ='M:/Year 3/CNN/Data/nih-malaria', target_size =(img_width, img_height),
+    class_mode = 'binary',
+    batch_size = 16,
+    subset = 'training'
+) # Training subset
+
+validation_data_generator = datagen.flow_from_directory(
+    directory ='M:/Year 3/CNN/Data/nih-malaria', target_size =(img_width, img_height),
+    class_mode = 'binary',
+    batch_size = 16,
+    subset = 'validation'
+) # Validation subset
+
+sample = next(train_data_generator)
+img = sample[0][0]
+label = sample[1][0]
+plt.imshow(img)
+print(label)
+
 ###############################################################################
 #train the model
 t=time.time()
-hist = model.fit(X_train, Y_train, batch_size=batch_size, epochs=num_epoch, verbose=1, 
-                     shuffle=True, validation_data=None)
+hist = model.fit_generator(generator=train_data_generator,
+                              steps_per_epoch = len(train_data_generator),
+                              epochs = num_epoch,
+                              validation_data = validation_data_generator,
+                              validation_steps = len(validation_data_generator))
 #compute the training time
 print('Training time: %s' % (time.time()-t))
 ###############################################################################
@@ -81,7 +113,7 @@ roc_auc = dict()
 for i in range(num_classes):
     fpr[i], tpr[i], _ = roc_curve(Y_test[:, i], y_pred[:, i])
     roc_auc[i] = auc(fpr[i], tpr[i])
-    
+
 # Compute micro-average ROC curve and ROC area
 fpr["micro"], tpr["micro"], _ = roc_curve(Y_test.ravel(), y_pred.ravel())
 roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
@@ -105,7 +137,7 @@ score = log_loss(Y_test,y_pred)
 print(score)
 
 ## compute the average precision score
-prec_score = average_precision_score(Y_test,y_pred)  
+prec_score = average_precision_score(Y_test,y_pred)
 print(prec_score)
 
 # transfer it back

@@ -18,8 +18,8 @@ valid_data_dir = 'M:/Year 3/CNN/Data/nih-malaria'
 nb_train_samples = 22048  # training samples
 nb_valid_samples = 5510  # validation samples
 num_classes = 2
-img_rows_orig = 208
-img_cols_orig = 148
+img_rows_orig = 100
+img_cols_orig = 100
 
 
 def load_training_data():
@@ -41,7 +41,9 @@ def load_training_data():
         print(label, total)
         for image_name in image_names_train:
             img = cv2.imread(os.path.join(train_data_dir, label, image_name), cv2.IMREAD_COLOR)
-            img = np.array([img])
+            img2 = cv2.resize(img, (100, 100))
+            img = np.array([img2])
+            #img = np.array([img])
             X_train[i] = img
             Y_train[i] = j
 
@@ -77,10 +79,11 @@ def load_validation_data():
         print(label, total)
         for image_name in image_names_valid:
             img = cv2.imread(os.path.join(valid_data_dir, label, image_name), cv2.IMREAD_COLOR)
+            img2 = cv2.resize(img, (100, 100))
+            #img = np.array([img])
 
-            img = np.array([img])
-
-            X_valid[i] = img
+            X_valid[i] = img2
+           #X_valid[i] = img
             Y_valid[i] = j
 
             if i % 100 == 0:

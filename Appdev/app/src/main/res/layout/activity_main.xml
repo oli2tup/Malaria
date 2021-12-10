@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="19dp"
+        android:text="@string/malaria_cnn"
+        android:textSize="34sp" />
+
+    <Spinner
+        android:layout_width="67dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="30dp"
+        android:layout_toStartOf="@+id/logo"
+        android:minHeight="48dp" />
+
+    <Button
+        android:id="@+id/newScan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="142dp"
+        android:layout_marginBottom="266dp"
+        android:text="@string/new_scan" />
+
+    <Button
+        android:id="@+id/database"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="143dp"
+        android:layout_marginBottom="214dp"
+        android:text="@string/database" />
+
+    <ImageView
+        android:id="@+id/microscope"
+        android:layout_width="247dp"
+        android:layout_height="251dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="87dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginBottom="355dp"
+        app:srcCompat="@drawable/microscope_logo"
+        android:contentDescription="@string/microscope" />
+</RelativeLayout>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Malaria</string>
+    <string name="malaria_cnn">Malaria CNN</string>
+    <string name="database">Database</string>
+    <string name="new_scan">New Scan</string>
+    <string name="todo">TODO</string>
+    <string name="microscope">microscope</string>
+    <string name="addbutton">addButton</string>
+</resources>

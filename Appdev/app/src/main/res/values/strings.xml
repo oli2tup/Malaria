@@ -6,4 +6,9 @@
     <string name="todo">TODO</string>
     <string name="microscope">microscope</string>
     <string name="addbutton">addButton</string>
+    <string name="update">Update</string>
+    <string name="initials">Initials</string>
+    <string name="lastname">LastName</string>
+    <string name="date">Date</string>
+    <string name="age">Age</string>
 </resources>

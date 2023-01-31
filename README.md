@@ -2,7 +2,15 @@
 
 <p>Download app https://github.com/oli2tup/Malaria/blob/08b14abb4b1a8f036bd35d7055ce9e3cca07d718/app-release.apk</p>
 
-  Capstone Year 3 project. 
+<p>Showing the mySQL database on the app working</p>
+
+https://user-images.githubusercontent.com/25754048/215635955-3011c19d-7328-4f08-8e33-3ce0931d658a.mp4
+<p>Showing the CNN classifier working on the app</p>
+
+https://user-images.githubusercontent.com/25754048/215636171-773f172f-45d9-4927-9d1c-89e2c149888a.mp4
+
+
+<p>Capstone Year 3 project.</p>
 Analysing blood samples for malaraia. 
 
 Develop algorithms that can segment out red blood cells in images of microscope slides and then determine whether or not they are infected using machine learning aproaches.

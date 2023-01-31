@@ -1,5 +1,6 @@
 # Malaria_ app
 
+<p>Download app (here)[https://github.com/oli2tup/Malaria/blob/08b14abb4b1a8f036bd35d7055ce9e3cca07d718/app-release.apk]
 Capstone Year 3 project. 
 Analysing blood samples for malaraia. 
 
